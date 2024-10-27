@@ -12,6 +12,7 @@
 #include "esp_event.h"
 #include "nvs_flash.h"
 #include "wifi_controller.h"
+#include "web_server.h"
 
 static const char *TAG = "main";
 
@@ -30,4 +31,7 @@ void app_main(void) {
 
   // Starts the blackout AP
   wifictl_start_blackout();
+
+  // Starts web server
+  webctl_start_server();
 }
