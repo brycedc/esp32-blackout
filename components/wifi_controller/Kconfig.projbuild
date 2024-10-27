@@ -1,0 +1,19 @@
+menu "WIFI Controller"
+  config AP_SSID
+    string "access point ssid"
+    default "Blackout" 
+    help
+      SSID of Management AP
+      
+  config AP_PASSWD
+    string "access point wifi"
+    default "mgtblackout"
+    help
+      Password of Management AP
+
+  config MAX_CONN
+    int "max connections"
+    default 1
+    help
+      Max number of connections of AP
+endmenu
