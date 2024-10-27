@@ -1,4 +1,4 @@
-menu "WIFI Controller"
+menu "Wifi Controller Settings"
   config AP_SSID
     string "access point ssid"
     default "Blackout" 
