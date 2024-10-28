@@ -1,0 +1,8 @@
+menu "Web Server Settings"
+  config WEB_SERVER_PORT
+    int "server port"
+    range 1 65535
+    default 80 
+    help
+      Port that the Web Server will bind to
+endmenu

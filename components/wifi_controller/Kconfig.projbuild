@@ -16,4 +16,14 @@ menu "Wifi Controller Settings"
     default 1
     help
       Max number of connections of AP
+  
+  menu "Scan Settings"
+    config SCAN_MAX_AP
+      int "max scans allowed"
+      default 10
+      range 1 50
+      help
+        Max number of AP to be stored in a scan
+  endmenu
+
 endmenu
