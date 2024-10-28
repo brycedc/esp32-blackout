@@ -3,6 +3,9 @@
 
 #include "esp_wifi_types_generic.h"
 
+// Headers for attack APIs
+#include "../attacks/scanner.h"
+
 /**
  * @brief Starts an access point
  * 
@@ -15,5 +18,6 @@ void wifictl_ap_start(wifi_config_t *wifi_config);
  * 
  */
 void wifictl_start_blackout(void); 
+
 
 #endif
