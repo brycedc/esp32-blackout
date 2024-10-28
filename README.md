@@ -1,6 +1,6 @@
 # ESP32 Blackout
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 This project is intended for educational purposes only. The author assumes no responsibility for any misuse or damage that may result from the use of this software. By using this project, you acknowledge and agree to use it responsibly and in compliance with all applicable laws and regulations.
 
@@ -37,3 +37,18 @@ idf.py menuconfig
 ```
 
 A menu under the name of **Wifi Controller Settings** should appear. Under that menu you can change the SSID, password, and max connections
+
+## ☁️ API Endpoints
+
+The ESP32 endpoints can be hit to gather information or attack a network. The default host will be 192.168.4.1
+
+### `/api/scan`
+
+Method: GET
+
+This endpoint performs a network scan and returns all the access points nearby with the following information.
+
+- SSID: the name of the access point
+- BSSID: the mac address of the access point
+- RSSI: the power of the access point (how close it is)
+- Channel: the channel the access point is operating on
