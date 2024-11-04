@@ -2,6 +2,7 @@
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include "routes/scan_route.h"
+#include "routes/deauth_route.h"
 
 static const char *TAG = "web_server";
 
@@ -19,6 +20,7 @@ void webctl_start_server(void) {
   if (httpd_start(&server, &config) == ESP_OK) {
     // Registers endpoint handlers
     ESP_ERROR_CHECK(httpd_register_uri_handler(server, getScanRoute()));
+    ESP_ERROR_CHECK(httpd_register_uri_handler(server, getDeAuthRoute()));
     ESP_LOGI(TAG, "Successfully started web server on port:%d",
              ESP_WEB_SERVER_PORT);
   }

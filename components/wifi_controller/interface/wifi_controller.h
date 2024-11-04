@@ -5,6 +5,7 @@
 
 // Headers for attack APIs
 #include "../attacks/scanner.h"
+#include "../attacks/deauth.h"
 
 /**
  * @brief Starts an access point

@@ -35,3 +35,14 @@ void app_main(void) {
   // Starts web server
   webctl_start_server();
 }
+
+/**
+ * @brief Decomplied function that overrides original one at compilation time.
+ *
+ * @attention This function is not meant to be called!
+ * @see Project with original idea/implementation
+ * https://github.com/GANESH-ICMC/esp32-deauther
+ */
+extern int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3) {
+  return 0;
+}
