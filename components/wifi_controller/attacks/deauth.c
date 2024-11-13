@@ -30,7 +30,7 @@ static deauth_frame_t deauth_frame = {
     .reason = {0x02, 0x00},
 };
 
-void wifictl_deauth(const uint8_t target_bssid[6]) {
+void wifictl_deauth(const uint8_t target_bssid[6], const int channel) {
 
 
   // Pushes the target MAC address into source and BSSID fields
