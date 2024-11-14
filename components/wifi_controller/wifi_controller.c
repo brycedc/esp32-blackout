@@ -55,10 +55,6 @@ void wifictl_ap_start(wifi_config_t *wifi_config) {
   // Starts the wifi
   ESP_ERROR_CHECK(esp_wifi_start());
 
-  // Sets the esp32 to be on the same channel as the BSSID we are trying to
-  // spoof
-  ESP_ERROR_CHECK(esp_wifi_set_channel(11, WIFI_SECOND_CHAN_NONE));
-
   ESP_LOGI(TAG, "AP started. SSID:%s password:%s channel:%d",
            wifi_config->ap.ssid, wifi_config->ap.password,
            wifi_config->ap.channel);
@@ -74,6 +70,7 @@ void wifictl_start_blackout(void) {
               .password = ESP_WIFI_AP_PASSWD,
               .max_connection = ESP_WIFI_MAX_STA_CONN,
               .authmode = WIFI_AUTH_WPA2_PSK,
+              .channel = 11,
           },
   };
 
