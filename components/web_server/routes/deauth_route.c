@@ -104,19 +104,25 @@ static esp_err_t route_handler(httpd_req_t *req) {
     return ESP_FAIL;
   }
 
+  cJSON *resp_obj = cJSON_CreateObject();
+  cJSON_AddStringToObject(resp_obj, "msg",
+                          "reconnect to blackout when the timeout has elapsed");
+  char *resp_str = cJSON_PrintUnformatted(resp_obj);
+  // Frees response object
+  cJSON_Delete(resp_obj);
+
   // Sends status 200 code back
-  char success_msg[150];
-  sprintf(success_msg,
-          "Started deauth...\n"
-          "Reconnect to blackout in %d seconds",
-          timeout->valueint);
-  ESP_ERROR_CHECK(httpd_resp_send(req, success_msg, strlen(success_msg)));
+  httpd_resp_set_type(req, "application/json");
+  ESP_ERROR_CHECK(httpd_resp_send(req, resp_str, strlen(resp_str)));
 
   // Gives time for client socket to respond
   vTaskDelay(100 / portTICK_PERIOD_MS);
 
   // Starts deauth attack
   wifictl_deauth(bssid_bytes, channel->valueint, timeout->valueint);
+
+  // Frees json object
+  cJSON_Delete(json);
 
   return ESP_OK;
 }
