@@ -41,7 +41,8 @@ static esp_err_t route_handler(httpd_req_t *req) {
   cJSON *json = cJSON_Parse(buf);
   if (json == NULL) {
     ESP_LOGE(TAG, "Invalid JSON format");
-    ESP_ERROR_CHECK(httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST, "Invalid JSON format"));
+    ESP_ERROR_CHECK(
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST, "Invalid JSON format"));
     return ESP_FAIL;
   }
 
@@ -51,16 +52,46 @@ static esp_err_t route_handler(httpd_req_t *req) {
     ESP_LOGE(TAG, "Failed to get BSSID from JSON object");
     cJSON_Delete(json);
     ESP_ERROR_CHECK(httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST,
-                        "Json object was missing a bssid tag"));
+                                        "Json object was missing a bssid tag"));
     return ESP_FAIL;
   }
 
   cJSON *channel = cJSON_GetObjectItem(json, "channel");
   if (channel == NULL) {
-    ESP_LOGE(TAG, "Failed to get BSSID from JSON object");
+    ESP_LOGE(TAG, "Failed to get channel from JSON object");
     cJSON_Delete(json);
-    ESP_ERROR_CHECK(httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST,
-                        "Json object was missing a bssid tag"));
+    ESP_ERROR_CHECK(httpd_resp_send_err(
+        req, HTTPD_400_BAD_REQUEST, "Json object was missing a channel tag"));
+    return ESP_FAIL;
+  } else if (!cJSON_IsNumber(channel)) {
+    ESP_LOGE(TAG, "channel is not a valid integer");
+    cJSON_Delete(json);
+    ESP_ERROR_CHECK(
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST,
+                            "Json object channel is not a valid integer"));
+    return ESP_FAIL;
+  } else if (channel->valueint < 1 || channel->valueint > 11) {
+    ESP_LOGE(TAG, "channel value is not between 1 and 11");
+    cJSON_Delete(json);
+    ESP_ERROR_CHECK(
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST,
+                            "Json object channel is not between 1 and 11"));
+    return ESP_FAIL;
+  }
+
+  cJSON *timeout = cJSON_GetObjectItem(json, "timeout");
+  if (timeout == NULL) {
+    ESP_LOGE(TAG, "Failed to get timeout from JSON object");
+    cJSON_Delete(json);
+    ESP_ERROR_CHECK(httpd_resp_send_err(
+        req, HTTPD_400_BAD_REQUEST, "Json object was missing a timeout tag"));
+    return ESP_FAIL;
+  } else if (!cJSON_IsNumber(timeout)) {
+    ESP_LOGE(TAG, "Timeout is not a valid integer");
+    cJSON_Delete(json);
+    ESP_ERROR_CHECK(
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST,
+                            "Json object timeout is not a valid integer"));
     return ESP_FAIL;
   }
 
@@ -73,11 +104,20 @@ static esp_err_t route_handler(httpd_req_t *req) {
     return ESP_FAIL;
   }
 
-  // Starts deauth attack
-  wifictl_deauth(bssid_bytes, channel->valueint);
-
   // Sends status 200 code back
-  ESP_ERROR_CHECK(httpd_resp_send(req, NULL, 0));
+  char success_msg[150];
+  sprintf(success_msg,
+          "Started deauth...\n"
+          "Reconnect to blackout in %d seconds",
+          timeout->valueint);
+  ESP_ERROR_CHECK(httpd_resp_send(req, success_msg, strlen(success_msg)));
+
+  // Gives time for client socket to respond
+  vTaskDelay(100 / portTICK_PERIOD_MS);
+
+  // Starts deauth attack
+  wifictl_deauth(bssid_bytes, channel->valueint, timeout->valueint);
+
   return ESP_OK;
 }
 

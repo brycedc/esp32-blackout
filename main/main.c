@@ -14,8 +14,6 @@
 #include "wifi_controller.h"
 #include "web_server.h"
 
-static const char *TAG = "main";
-
 void app_main(void) {
   // Initialize NVS
   esp_err_t ret = nvs_flash_init();
@@ -41,7 +39,7 @@ void app_main(void) {
  *
  * @attention This function is not meant to be called!
  * @see Project with original idea/implementation
- * https://github.com/GANESH-ICMC/esp32-deauther
+ * https://github.com/risinek/esp32-wifi-penetration-tool
  */
 extern int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3) {
   return 0;

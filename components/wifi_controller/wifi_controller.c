@@ -15,7 +15,6 @@ static const char *TAG = "wifi_controller";
 #define ESP_WIFI_AP_PASSWD CONFIG_AP_PASSWD
 #define ESP_WIFI_MAX_STA_CONN CONFIG_MAX_CONN
 
-
 void wifictl_init(void) {
 
   // This function should only be called once
@@ -35,19 +34,19 @@ void wifictl_init(void) {
   wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
   ESP_ERROR_CHECK(esp_wifi_init(&config));
 
-  // Sets the WIFI operating mode to AP/STA
-  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
-  ESP_LOGI(TAG, "set wifi mode to AP/STA");
-
   wifi_init = true;
 }
 
-void wifictl_ap_start(wifi_config_t *wifi_config) {
+void wifictl_ap_sta_start(wifi_config_t *wifi_config) {
 
   // Checks that the WIFI init function was called
   if (!wifi_init) {
     wifictl_init();
   }
+
+  // Sets the WIFI operating mode to AP/STA
+  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
+  ESP_LOGI(TAG, "set wifi mode to AP/STA");
 
   // Sets the AP configuration
   ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, wifi_config));
@@ -74,5 +73,6 @@ void wifictl_start_blackout(void) {
           },
   };
 
-  wifictl_ap_start(&wifi_config);
+  ESP_LOGI(TAG, "Staring blackout management ap...");
+  wifictl_ap_sta_start(&wifi_config);
 }
