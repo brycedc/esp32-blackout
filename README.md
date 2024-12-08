@@ -10,6 +10,9 @@ This project utilizes the Espressif IoT Development Framework.
 
 https://github.com/espressif/esp-idf
 
+> [!IMPORTANT]
+> I have been using **v5.3.1** for building and flashing this project.
+
 ### Building the Project
 
 ```bash
