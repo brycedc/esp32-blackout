@@ -40,7 +40,7 @@ A menu under the name of **Wifi Controller Settings** should appear. Under that 
 
 ## ☁️ API Endpoints
 
-The ESP32 endpoints can be hit to gather information or attack a network. The default host will be 192.168.4.1
+The ESP32 endpoints can be hit to gather information or attack a network. The default host will be **192.168.4.1**
 
 ### `/api/scan`
 
@@ -52,3 +52,21 @@ This endpoint performs a network scan and returns all the access points nearby w
 - BSSID: the mac address of the access point
 - RSSI: the power of the access point (how close it is)
 - Channel: the channel the access point is operating on
+
+### `/api/deauth`
+
+Method: POST
+
+```json
+{
+  "bssid": "aa:bb:cc:dd:ee:ff",
+  "channel": 1,
+  "timeout": 30
+}
+```
+
+This endpoint performs a deauth attack by spoofing a management deauth frame and sending it once every second on the provided channel.
+
+- BSSID: the mac address of the access point to spoof
+- Channel: the channel to broadcast from (this needs to match the channel of the access point you are trying to spoof)
+- Timeout: the number of seconds to broadcast for. A spoofed frame is sent every second.
